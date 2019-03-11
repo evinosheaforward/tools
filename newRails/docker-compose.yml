@@ -1,0 +1,25 @@
+version: '3'
+services:
+  db:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_USER: pguser
+      POSTGRES_PASSWORD: pguser
+      POSTGRES_DB: pgdb
+      DB_HOST: db
+    ports:
+      - "5432:5432"
+  app:
+    image: productivity-frontend
+    command: puma
+    volumes:
+      - ".:/app"
+    ports:
+      - "3000:3000"
+    depends_on:
+      - db
+    links:
+      - db
+    env_file:
+      - .env
